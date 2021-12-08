@@ -45,7 +45,6 @@ public class UnusedPrivateFieldRule extends AbstractLombokAwareRule {
         if (hasIgnoredAnnotation(node)) {
             return super.visit(node, data);
         }
-
         Map<VariableNameDeclaration, List<NameOccurrence>> vars = node.getScope()
                                                                       .getDeclarations(VariableNameDeclaration.class);
         for (Map.Entry<VariableNameDeclaration, List<NameOccurrence>> entry : vars.entrySet()) {
@@ -57,7 +56,7 @@ public class UnusedPrivateFieldRule extends AbstractLombokAwareRule {
                 continue;
             }
             if (!actuallyUsed(entry.getValue())) {
-                if (!usedInOuterClass(node, decl) && !usedInOuterEnum(node, decl)) {
+                if (!usedInOuterClass(node, decl) && !usedInOuterEnum(node, decl) && !usedInInnerEnum(node, decl)) {
                     addViolation(data, decl.getNode(), decl.getImage());
                 }
             }
@@ -69,6 +68,18 @@ public class UnusedPrivateFieldRule extends AbstractLombokAwareRule {
         List<ASTEnumDeclaration> outerEnums = node.getParentsOfType(ASTEnumDeclaration.class);
         for (ASTEnumDeclaration outerEnum : outerEnums) {
             ASTEnumBody enumBody = outerEnum.getFirstChildOfType(ASTEnumBody.class);
+            if (usedInOuter(decl, enumBody)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // added this method to force declaration searches on inner nodes and enums
+    private boolean usedInInnerEnum(ASTClassOrInterfaceDeclaration node, NameDeclaration decl) {
+        List<ASTEnumDeclaration> innerEnums = node.findChildrenOfType(ASTEnumDeclaration.class);
+        for (ASTEnumDeclaration innerEnum : innerEnums) {
+            ASTEnumBody enumBody = innerEnum.getFirstChildOfType(ASTEnumBody.class);
             if (usedInOuter(decl, enumBody)) {
                 return true;
             }

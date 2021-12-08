@@ -268,9 +268,10 @@ import java.util.logging.Logger;
                 : forClass(Array.newInstance(getType(), (int[]) Array.newInstance(int.class, numDimensions)).getClass());
     }
 
+    // consider enum as a class
     @Override
     public boolean isClassOrInterface() {
-        return !clazz.isEnum() && !clazz.isPrimitive() && !clazz.isAnnotation() && !clazz.isArray();
+        return !clazz.isPrimitive() && !clazz.isAnnotation() && !clazz.isArray();
     }
 
     @Override
