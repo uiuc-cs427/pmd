@@ -17,19 +17,6 @@ class Test {
     </test-code>
     <test-code>
         <description>simple unused private field</description>
-        <expected-problems>0</expected-problems>
-        <code><![CDATA[
-class Test {
-  enum EnumClass {
-      subClass();
-      EnumClass() {}
-      private int a;  // should report a warning here
-  }
-}
-        ]]></code>
-    </test-code>
-    <test-code>
-        <description>simple unused private field</description>
         <expected-problems>1</expected-problems>
         <code><![CDATA[
 public class Foo {
