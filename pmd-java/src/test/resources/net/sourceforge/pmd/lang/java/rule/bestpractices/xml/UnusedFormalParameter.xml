@@ -4,22 +4,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/rule-tests http://pmd.sourceforge.net/rule-tests_1_0_0.xsd">
 
-
-
-    <test-code>
-        <description>failure case</description>
-        <expected-problems>1</expected-problems>
-        <code><![CDATA[
-class Tester {
-    enum EnumClass {
-        subClass();
-        EnumClass() {}
-        void func(int arg) {}  // should report a warning here
-    }
-}
-        ]]></code>
-    </test-code>
-
     <test-code>
         <description>failure case</description>
         <expected-problems>1</expected-problems>
