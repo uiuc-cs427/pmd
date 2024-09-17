@@ -131,17 +131,13 @@ public class ClassScope extends AbstractJavaScope {
                 && (javaOccurrence.isMethodOrConstructorInvocation() || javaOccurrence.isMethodReference())) {
             for (NameDeclaration decl : declarations) {
                 List<NameOccurrence> nameOccurrences = getMethodDeclarations().get(decl);
-                if (nameOccurrences == null) {
-                    // TODO may be a class name: Foo.this.super();
-
-                    // search inner classes
-                    for (ClassNameDeclaration innerClass : getClassDeclarations().keySet()) {
-                        Scope innerClassScope = innerClass.getScope();
-                        if (innerClassScope.contains(javaOccurrence)) {
-                            innerClassScope.addNameOccurrence(javaOccurrence);
-                        }
+                for (ClassNameDeclaration innerClass : getClassDeclarations().keySet()) {
+                    Scope innerClassScope = innerClass.getScope();
+                    if (innerClassScope.contains(javaOccurrence)) {
+                        innerClassScope.addNameOccurrence(javaOccurrence);
                     }
-                } else {
+                }
+                if (nameOccurrences != null) {
                     nameOccurrences.add(javaOccurrence);
                     Node n = javaOccurrence.getLocation();
                     if (n instanceof ASTName) {
